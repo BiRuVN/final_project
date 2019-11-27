@@ -2,6 +2,7 @@ package com.example.contact;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,18 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         final Contact contact = arrContact.get(position);
+
+        int fav = contact.getFav();
+        if (fav == 1) {
+            int color = Color.parseColor("#FFFF0000");  //red
+            viewHolder.imgFav.setColorFilter(color);
+        } else {
+            int color = Color.parseColor("#FF000000");  //black
+            viewHolder.imgFav.setColorFilter(color);
+        }
+
         viewHolder.tvName.setText(contact.getName());
 
         viewHolder.imgPhone.setOnClickListener(new View.OnClickListener() {

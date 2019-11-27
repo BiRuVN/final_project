@@ -11,7 +11,7 @@
         android:layout_height="60dp"
         android:src="@drawable/ic_person_black_24dp"
         app:civ_border_width="2dp"
-        app:civ_border_color="#FF0000"/>
+        app:civ_border_color="#2B2B2B"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"

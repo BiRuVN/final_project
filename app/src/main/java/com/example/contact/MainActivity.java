@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     int index;
 
     ArrayList<Contact> contacts;
-    CustomAdapter customAdapter;
+    CustomAdapter customAdapter, mAdapter;
     private MyDatabase db;
 
     @Override
@@ -60,6 +60,36 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,2);
             }
         });
+
+//        edtSearch.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+//                int textlength = cs.length();
+//                ArrayList<Contact> tempArrayList = new ArrayList<>();
+//                for(Contact c: contacts){
+//                    if (textlength <= c.getName().length()) {
+//                        if (c.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
+//                            tempArrayList.add(c);
+//                        }
+//                    }
+//                }
+//                if(edtSearch.getText().toString() == ""){
+//                    lvContacts.setAdapter(customAdapter);
+//                }
+//                else{
+//                    mAdapter = new CustomAdapter(getApplicationContext(), R.layout.row_listview, tempArrayList);
+//                    lvContacts.setAdapter(mAdapter);
+//                }
+//
+//            }
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//            }
+//        });
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
