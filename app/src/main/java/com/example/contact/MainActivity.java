@@ -3,11 +3,12 @@ package com.example.contact;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -16,13 +17,13 @@ import java.util.ArrayList;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    AutoCompleteTextView tvSearch;
+    EditText edtSearch;
     ListView lvContacts;
     FloatingActionButton btnAddContact;
     int index;
 
     ArrayList<Contact> contacts;
-    CustomAdapter customAdapter, adapterSearch;
+    CustomAdapter customAdapter, mAdapter;
     private MyDatabase db;
 
     @Override
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvSearch=findViewById(R.id.tv_search);
+        edtSearch=findViewById(R.id.edt_search);
         lvContacts=findViewById(R.id.lv_contacts);
         btnAddContact=findViewById(R.id.btn_add);
 
@@ -42,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 this, R.layout.row_listview, contacts);
         lvContacts.setAdapter(customAdapter);
 
-        adapterSearch = new CustomAdapter(this, R.layout.row_listview, contacts);
-        tvSearch.setAdapter(adapterSearch);
-        tvSearch.setThreshold(1);
+//        adapterSearch = new CustomAdapter(this, R.layout.row_listview, contacts);
+//        tvSearch.setAdapter(adapterSearch);
+//        tvSearch.setThreshold(1);
 
         lvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -65,16 +66,39 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,2);
             }
         });
-        tvSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int index=contacts.indexOf(((TextView)view).getText().toString());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("contact3",contacts.get(index));
-                Intent intent= new Intent(MainActivity.this,EditContactActivity.class);
-                intent.putExtra("package3",bundle);
-                startActivityForResult(intent,1);
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                int textlength = cs.length();
+                if(textlength==0){
+                    lvContacts.setAdapter(customAdapter);
+                }
+                else {
+                    ArrayList<Contact> tempArrayList = new ArrayList<>();
+                    for (Contact c : contacts) {
+                        if (textlength <= c.getName().length()) {
+                            if (c.getName().toLowerCase().startsWith(cs.toString().toLowerCase())) {
+                                tempArrayList.add(c);
+                            }
+                        }
+                    }
+                    if (edtSearch.getText().toString() == "") {
+                        lvContacts.setAdapter(customAdapter);
+                    } else {
+                        mAdapter = new CustomAdapter(getApplicationContext(), R.layout.row_listview, tempArrayList);
+                        lvContacts.setAdapter(mAdapter);
+                    }
+                }
             }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
         });
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -86,20 +110,18 @@ public class MainActivity extends AppCompatActivity {
                 db.updateContact(contact);
                 contacts.set(index, contact);
                 customAdapter.notifyDataSetChanged();
-//                adapterSearch.notifyDataSetChanged();
             }
             if (resultCode == 123) {
-                try{
+                try {
                     Bundle bundle = intent.getBundleExtra("package1");
                     Contact contact = (Contact) bundle.getSerializable("contact1");
                     db.deleteContact(contact);
                     contacts.remove(index);
                     customAdapter.notifyDataSetChanged();
-//                    adapterSearch.notifyDataSetChanged();
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e) {
 
                 }
+            }
         }
         if (requestCode == 2) {
                 if(resultCode == Activity.RESULT_OK) {
@@ -110,11 +132,9 @@ public class MainActivity extends AppCompatActivity {
                     contacts.add(contact);
                     customAdapter.notifyDataSetChanged();
                 } catch (NullPointerException e) {
+
                 }
             }
-        }
-
-
         }
 
     }

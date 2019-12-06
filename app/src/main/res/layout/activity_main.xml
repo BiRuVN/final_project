@@ -7,18 +7,16 @@
     android:layout_marginRight="10dp"
     tools:context=".MainActivity">
 
-    <AutoCompleteTextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search"
-        android:id="@+id/tv_search">
-
-    </AutoCompleteTextView>
+        android:id="@+id/edt_search">
+    </EditText>
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_search"
+        android:layout_below="@id/edt_search"
         android:id="@+id/lv_contacts">
 
     </ListView>

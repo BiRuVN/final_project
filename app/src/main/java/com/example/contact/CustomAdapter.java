@@ -116,10 +116,8 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
             }
             else {
                 clear();
-//                for (Contact contactObj : arrContact) {
-//                    add(contactObj);
-                    notifyDataSetChanged();
-//                }
+                notifyDataSetChanged();
+
             }
         }
     };
