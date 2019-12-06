@@ -1,9 +1,12 @@
 package com.example.contact;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,12 +15,18 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class EditContactActivity extends AppCompatActivity {
-    EditText edtName,edtMobile;
-    Button btnCancel,btnFinish;
-    FloatingActionButton btnFav;
+    EditText edtName,edtMobile, edtSMS;
+    Button btnCancel,btnFinish, btnSMS, btnSendSMS;
+    FloatingActionButton btnFav, btnDelete;
     Contact contact;
+    boolean invisible = true;
+
+    final int SEND_SMS_PERMISSION_REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,12 +36,18 @@ public class EditContactActivity extends AppCompatActivity {
         edtMobile=findViewById(R.id.edt_mobileedit);
         btnCancel=findViewById(R.id.btn_canceledit);
         btnFinish=findViewById(R.id.btn_finishedit);
+        btnDelete = findViewById(R.id.btn_del);
         btnFav = findViewById(R.id.btn_fav);
+        btnSendSMS = findViewById(R.id.btn_sendsms);
+        btnSMS = findViewById(R.id.btn_sms);
+        edtSMS = findViewById(R.id.textsms);
 
         Bundle bundle = getIntent().getBundleExtra("package3");
         contact = (Contact) bundle.getSerializable("contact3");
         edtName.setText(contact.getName());
         edtMobile.setText(contact.getPhone());
+        edtSMS.setVisibility(View.INVISIBLE);
+        btnSendSMS.setVisibility(View.INVISIBLE);
 
         int fav = contact.getFav();
         if (fav == 1) {
@@ -86,6 +101,71 @@ public class EditContactActivity extends AppCompatActivity {
                 }
             }
         });
+        btnDelete.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("contact1", contact);
+                Intent intent = getIntent();
+                intent.putExtra("package1", bundle);
+                setResult(123, intent);
+                finish();
+            }
+        });
+        btnSMS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(invisible){
+                    edtSMS.setVisibility(View.VISIBLE);
+                    btnSendSMS.setVisibility(View.VISIBLE);
+                    invisible = false;
+                }
+                else{
+                    edtSMS.setVisibility(View.INVISIBLE);
+                    edtSMS.setText("");
+                    btnSendSMS.setVisibility(View.INVISIBLE);
+                    invisible = true;
+                }
+            }
+        });
+        btnSendSMS.setEnabled(false);
+        if(checkPermission(Manifest.permission.SEND_SMS)){
+            btnSendSMS.setEnabled(true);
+        }
+        else{
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQUEST_CODE);
+        }
+        btnSendSMS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSend();
+            }
+        });
+    }
 
+    public void onSend(){
+        String phoneNum = edtMobile.getText().toString();
+        String mess = edtSMS.getText().toString();
+        if(phoneNum == null || phoneNum.length() == 0 || mess == null || mess.length() == 0){
+            return;
+        }
+
+        if(checkPermission(Manifest.permission.SEND_SMS)){
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNum, null, mess, null, null);
+            Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
+            edtSMS.setVisibility(View.INVISIBLE);
+            edtSMS.setText("");
+            btnSendSMS.setVisibility(View.INVISIBLE);
+            invisible = true;
+        }
+        else{
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public  boolean checkPermission(String permission){
+        int check = ContextCompat.checkSelfPermission(this, permission);
+        return (check == PackageManager.PERMISSION_GRANTED);
     }
 }

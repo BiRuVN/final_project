@@ -7,17 +7,21 @@
     android:layout_marginRight="10dp"
     tools:context=".MainActivity">
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:hint="Search"
-        android:id="@+id/edt_search"></EditText>
+        android:id="@+id/tv_search">
+
+    </AutoCompleteTextView>
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edt_search"
-        android:id="@+id/lv_contacts"></ListView>
+        android:layout_below="@id/tv_search"
+        android:id="@+id/lv_contacts">
+
+    </ListView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,5 +30,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_add_black_24dp"
-        android:id="@+id/btn_add"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+        android:id="@+id/btn_add">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </RelativeLayout>
