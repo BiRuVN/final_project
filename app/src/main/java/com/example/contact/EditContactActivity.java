@@ -146,7 +146,7 @@ public class EditContactActivity extends AppCompatActivity {
     public void onSend(){
         String phoneNum = edtMobile.getText().toString();
         String mess = edtSMS.getText().toString();
-        if(phoneNum == null || phoneNum.length() == 0 || mess == null || mess.length() == 0){
+        if(phoneNum.length() == 0 || mess.length() == 0){
             return;
         }
 

@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton btnAddContact;
     int index;
 
-    ArrayList<Contact> contacts;
+    ArrayList<Contact> contacts, tempArrayList;
     CustomAdapter customAdapter, mAdapter;
     private MyDatabase db;
 
@@ -43,16 +43,13 @@ public class MainActivity extends AppCompatActivity {
                 this, R.layout.row_listview, contacts);
         lvContacts.setAdapter(customAdapter);
 
-//        adapterSearch = new CustomAdapter(this, R.layout.row_listview, contacts);
-//        tvSearch.setAdapter(adapterSearch);
-//        tvSearch.setThreshold(1);
-
         lvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 index=i;
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("contact3",contacts.get(i));
+                if(lvContacts.getAdapter()==customAdapter) bundle.putSerializable("contact3",contacts.get(i));
+                else bundle.putSerializable("contact3",tempArrayList.get(i));
                 Intent intent= new Intent(MainActivity.this, EditContactActivity.class);
                 intent.putExtra("package3",bundle);
                 startActivityForResult(intent,1);
@@ -75,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     lvContacts.setAdapter(customAdapter);
                 }
                 else {
-                    ArrayList<Contact> tempArrayList = new ArrayList<>();
+                    tempArrayList = new ArrayList<>();
                     for (Contact c : contacts) {
                         if (textlength <= c.getName().length()) {
                             if (c.getName().toLowerCase().startsWith(cs.toString().toLowerCase())) {
@@ -109,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 Contact contact = (Contact) bundle.getSerializable("contact1");
                 db.updateContact(contact);
                 contacts.set(index, contact);
-                customAdapter.notifyDataSetChanged();
+//                customAdapter.notifyDataSetChanged();
             }
             if (resultCode == 123) {
                 try {
@@ -117,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     Contact contact = (Contact) bundle.getSerializable("contact1");
                     db.deleteContact(contact);
                     contacts.remove(index);
-                    customAdapter.notifyDataSetChanged();
+//                    customAdapter.notifyDataSetChanged();
                 } catch (NullPointerException e) {
 
                 }
@@ -130,12 +127,14 @@ public class MainActivity extends AppCompatActivity {
                     Contact contact = (Contact) bundle.getSerializable("contact2");
                     db.addContact(contact);
                     contacts.add(contact);
-                    customAdapter.notifyDataSetChanged();
+//                    customAdapter.notifyDataSetChanged();
                 } catch (NullPointerException e) {
 
                 }
             }
         }
+        customAdapter.notifyDataSetChanged();
+        edtSearch.setText("");
 
     }
 }

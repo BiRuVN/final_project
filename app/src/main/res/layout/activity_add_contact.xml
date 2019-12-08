@@ -17,7 +17,9 @@
             android:text="✗"
             android:textSize="30dp"
             style="?android:attr/borderlessButtonStyle"
-            android:id="@+id/btn_cancel"></Button>
+            android:id="@+id/btn_cancel">
+
+        </Button>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,14 +27,18 @@
             android:gravity="center"
             android:text="New Contact"
             android:textStyle="bold"
-            android:textSize="30dp"></TextView>
+            android:textSize="30dp">
+
+        </TextView>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="✓"
             android:textSize="30dp"
             style="?android:attr/borderlessButtonStyle"
-            android:id="@+id/btn_finish"></Button>
+            android:id="@+id/btn_finish">
+
+        </Button>
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -58,11 +64,15 @@
             android:layout_height="wrap_content"
             android:text="Name "
             android:textStyle="bold"
-            android:textSize="20dp"></TextView>
+            android:textSize="20dp">
+
+        </TextView>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edt_name"></EditText>
+            android:id="@+id/edt_name">
+
+        </EditText>
     </LinearLayout>
 
     <LinearLayout
@@ -77,11 +87,16 @@
             android:layout_height="wrap_content"
             android:text="Mobile "
             android:textStyle="bold"
-            android:textSize="20dp"></TextView>
+            android:textSize="20dp">
+
+        </TextView>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edt_mobile"></EditText>
+            android:inputType="phone"
+            android:id="@+id/edt_mobile">
+
+        </EditText>
     </LinearLayout>
 
 </LinearLayout>
