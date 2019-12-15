@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,15 +21,13 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
 
     private Context context;
     private int resource;
-    private ArrayList<Contact> arrContact,tempItems, suggestions;
+    private ArrayList<Contact> arrContact;
 
     public CustomAdapter(Context context, int resource, ArrayList<Contact> arrContact) {
         super(context, resource, arrContact);
         this.context = context;
         this.resource = resource;
         this.arrContact = arrContact;
-        tempItems = new ArrayList<>(arrContact);
-        suggestions = new ArrayList<>();
     }
     @SuppressLint("ResourceType")
     @NonNull
@@ -81,49 +78,4 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
         ImageView imgFav;
         CircleImageView prof_img;
     }
-    @NonNull
-    @Override
-    public Filter getFilter() {
-        return contactFilter;
-    }
-    private Filter contactFilter = new Filter() {
-        @Override
-        public CharSequence convertResultToString(Object resultValue) {
-            Contact contact = (Contact) resultValue;
-            return contact.getName();
-        }
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            if (charSequence != null) {
-                suggestions.clear();
-                for (Contact contact: tempItems) {
-                    if (contact.getName().toLowerCase().startsWith(charSequence.toString().toLowerCase())) {
-                        suggestions.add(contact);
-                    }
-                }
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = suggestions;
-                filterResults.count = suggestions.size();
-                return filterResults;
-            } else {
-                return new FilterResults();
-            }
-        }
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            ArrayList<Contact> tempValues = (ArrayList<Contact>) filterResults.values;
-            if (filterResults != null && filterResults.count > 0) {
-                clear();
-                for (Contact contactObj : tempValues) {
-                    add(contactObj);
-                    notifyDataSetChanged();
-                }
-            }
-            else {
-                clear();
-                notifyDataSetChanged();
-
-            }
-        }
-    };
 }
