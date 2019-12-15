@@ -17,7 +17,7 @@ public class MyDatabase extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db){
-        String script="Create table contact(id INTEGER primary key,name TEXT, phone TEXT, fav INTEGER)";
+        String script="Create table contact(id INTEGER primary key,name TEXT, phone TEXT, fav INTEGER, image INTEGER, email TEXT)";
         db.execSQL(script);
     }
     @Override
@@ -30,6 +30,8 @@ public class MyDatabase extends SQLiteOpenHelper {
         values.put("name",contact.getName());
         values.put("phone",contact.getPhone());
         values.put("fav",contact.getFav());
+        values.put("image",contact.getImage());
+        values.put("email",contact.getEmail());
         db.insert("contact",null,values);
         db.close();
     }
@@ -44,6 +46,8 @@ public class MyDatabase extends SQLiteOpenHelper {
         values.put("name",contact.getName());
         values.put("phone",contact.getPhone());
         values.put("fav",contact.getFav());
+        values.put("image",contact.getImage());
+        values.put("email",contact.getEmail());
         return db.update("contact", values,"id=?",new String[]{String.valueOf(contact.getId())});
     }
     public ArrayList<Contact> getAllContact(){
@@ -57,6 +61,8 @@ public class MyDatabase extends SQLiteOpenHelper {
             contact.setName(cursor.getString(1));
             contact.setPhone(cursor.getString(2));
             contact.setFav(cursor.getInt(3));
+            contact.setImage(cursor.getInt(4));
+            contact.setEmail(cursor.getString(5));
             contacts.add(contact);
         }
         return contacts;

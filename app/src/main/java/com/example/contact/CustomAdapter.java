@@ -1,5 +1,6 @@
 package com.example.contact;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,12 +16,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomAdapter extends ArrayAdapter<Contact> {
 
-    Context context;
-    int resource;
-    ArrayList<Contact> arrContact,tempItems, suggestions;
+    private Context context;
+    private int resource;
+    private ArrayList<Contact> arrContact,tempItems, suggestions;
 
     public CustomAdapter(Context context, int resource, ArrayList<Contact> arrContact) {
         super(context, resource, arrContact);
@@ -30,7 +32,8 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
         tempItems = new ArrayList<>(arrContact);
         suggestions = new ArrayList<>();
     }
-
+    @SuppressLint("ResourceType")
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -40,7 +43,7 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
             viewHolder.tvName =  convertView.findViewById(R.id.tv_name);
             viewHolder.imgPhone =  convertView.findViewById(R.id.img_phone);
             viewHolder.imgFav = convertView.findViewById(R.id.img_fav);
-
+            viewHolder.prof_img = convertView.findViewById(R.id.profile_image);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -57,6 +60,7 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
             viewHolder.imgFav.setColorFilter(color);
         }
 
+        viewHolder.prof_img.setImageResource(contact.getImage());
         viewHolder.tvName.setText(contact.getName());
 
         viewHolder.imgPhone.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +79,7 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
         TextView tvName;
         ImageView imgPhone;
         ImageView imgFav;
+        CircleImageView prof_img;
     }
     @NonNull
     @Override
